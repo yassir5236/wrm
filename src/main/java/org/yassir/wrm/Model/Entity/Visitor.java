@@ -21,7 +21,6 @@ public class Visitor implements Serializable {
     private Long id;
 
 
-
     private String FirstName;
 
     private String LastName;

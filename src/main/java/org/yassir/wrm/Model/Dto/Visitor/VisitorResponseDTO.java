@@ -1,13 +1,15 @@
 package org.yassir.wrm.Model.Dto.Visitor;
 
+import org.yassir.wrm.Model.Dto.Visit.EmbeddebelVisitDTO;
+
 import java.util.List;
 
-public record VisitorResponse(
+public record VisitorResponseDTO(
 
         Long id,
         String firstName,
         String lastName,
-        List<EmbeddebelVisitor> visitors
+        List<EmbeddebelVisitDTO> visits
 
 ) {
 }

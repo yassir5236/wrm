@@ -4,7 +4,7 @@ import org.yassir.wrm.Model.Enum.StatusType;
 
 import java.time.LocalDate;
 
-public record VisitRequest(
+public record VisitRequestDTO(
 
 
         LocalDate arriveTime,

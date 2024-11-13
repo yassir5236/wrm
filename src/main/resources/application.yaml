@@ -1,3 +1,12 @@
+# application.yml
+wrm:
+  scheduling:
+    algorithm: FIFO
+
+
+
+
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5431/wrm
