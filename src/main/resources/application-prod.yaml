@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://prod-db-server:5432/prod_db
+    username: prod_user
+    password: prod_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+  logging:
+    level:
+      root: ERROR

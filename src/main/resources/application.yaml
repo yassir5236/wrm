@@ -1,13 +1,15 @@
-# application.yml
 wrm:
   scheduling:
     algorithm: FIFO
+    type-mode: full_time
 
 
 
 
 
 spring:
+  profiles:
+    active: uat
   datasource:
     url: jdbc:postgresql://localhost:5431/wrm
     username: yassir
@@ -21,3 +23,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  logging:
+    level:
+      root: INFO
+
+
+
+

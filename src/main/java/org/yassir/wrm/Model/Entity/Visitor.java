@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,5 +27,5 @@ public class Visitor implements Serializable {
     private String LastName;
 
     @OneToMany(mappedBy = "visitor")
-    List<Visit> visits;
+    List<Visit> visits =new ArrayList<>();
 }

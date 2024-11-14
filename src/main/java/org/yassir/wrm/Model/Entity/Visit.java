@@ -3,10 +3,11 @@ package org.yassir.wrm.Model.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.yassir.wrm.Model.Enum.StatusType;
-import org.yassir.wrm.Model.embeddeds.VisitKey;
+import org.yassir.wrm.embeddeds.VisitKey;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,10 +22,10 @@ public class Visit implements Serializable {
     @EmbeddedId
     private VisitKey id;
 
-    private LocalDate arriveTime;
+    private LocalDateTime arriveTime;
 
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     private StatusType status;
 
