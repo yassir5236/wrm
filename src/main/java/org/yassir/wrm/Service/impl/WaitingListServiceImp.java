@@ -41,13 +41,53 @@ public class WaitingListServiceImp implements IWaitingListService {
         WaitingList savedWaitingList = waitingListRepository.save(waitingList);
         return waitingListMapper.toResponseDto(savedWaitingList);
     }
+//
+//    @Override
+//    public WaitingListResponseDTO getWaitingListById(Long waitingListId) {
+//        WaitingList waitingList = waitingListRepository.findById(waitingListId)
+//                .orElseThrow(() -> new RuntimeException("Waiting list not found with ID: " + waitingListId));
+//        return waitingListMapper.toResponseDto(waitingList);
+//    }
+
 
     @Override
     public WaitingListResponseDTO getWaitingListById(Long waitingListId) {
         WaitingList waitingList = waitingListRepository.findById(waitingListId)
                 .orElseThrow(() -> new RuntimeException("Waiting list not found with ID: " + waitingListId));
+
+        // Use the default algorithm if the waiting list's algorithm is null
+        Algorithm algorithm = waitingList.getAlgorithm() != null
+                ? waitingList.getAlgorithm()
+                : waitingListConfig.getDefaultAlgorithm();
+
+        List<Visit> sortedVisits;
+        switch (algorithm) {
+            case FIFO:
+                sortedVisits = waitingList.getVisits().stream()
+                        .sorted(Comparator.comparing(Visit::getArriveTime))
+                        .collect(Collectors.toList());
+                break;
+            case HPS:
+                sortedVisits = waitingList.getVisits().stream()
+                        .sorted(Comparator.comparing(Visit::getPriority).reversed())
+                        .collect(Collectors.toList());
+                break;
+            case SJF:
+                sortedVisits = waitingList.getVisits().stream()
+                        .sorted(Comparator.comparing(Visit::getEstimatedProcessingTime))
+                        .collect(Collectors.toList());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown algorithm: " + algorithm);
+        }
+
+        // Set the sorted list back to the waiting list
+        waitingList.setVisits(sortedVisits);
+
+        // Map the waiting list to a response DTO and return it
         return waitingListMapper.toResponseDto(waitingList);
     }
+
 
     @Override
     public WaitingListResponseDTO updateWaitingList(Long id, WaitingListRequestDTO waitingListRequestDTO) {

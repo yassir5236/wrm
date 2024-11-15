@@ -46,10 +46,16 @@ public class WaitingListController {
     }
 
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<WaitingListResponseDTO> getWaitingListById(@PathVariable Long id) {
+//        WaitingListResponseDTO waitingListResponseDTO = waitingListService.getWaitingListById(id);
+//        return ResponseEntity.ok(waitingListResponseDTO);
+//    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<WaitingListResponseDTO> getWaitingListById(@PathVariable Long id) {
-        WaitingListResponseDTO waitingListResponseDTO = waitingListService.getWaitingListById(id);
-        return ResponseEntity.ok(waitingListResponseDTO);
+    public ResponseEntity<WaitingListResponseDTO> getSortedWaitingListById(@PathVariable Long id) {
+        WaitingListResponseDTO sortedWaitingList = waitingListService.getWaitingListById(id);
+        return ResponseEntity.ok(sortedWaitingList);
     }
 
 

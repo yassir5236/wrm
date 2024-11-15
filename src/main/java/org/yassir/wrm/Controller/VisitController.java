@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.yassir.wrm.Dto.Visit.VisitRequestDTO;
 import org.yassir.wrm.Dto.Visit.VisitResponseDTO;
+import org.yassir.wrm.Dto.WaitingList.WaitingListResponseDTO;
 import org.yassir.wrm.Service.IVisitService;
+import org.yassir.wrm.Service.IWaitingListService;
 
 import java.util.List;
 
@@ -17,10 +19,12 @@ import java.util.List;
 public class VisitController {
 
     private final IVisitService visitService;
+    private final IWaitingListService waitingListService;
 
     @Autowired
-    public VisitController(IVisitService visitService) {
+    public VisitController(IVisitService visitService , IWaitingListService waitingListService) {
         this.visitService = visitService;
+        this.waitingListService = waitingListService;
     }
 
     @PostMapping
@@ -54,6 +58,10 @@ public class VisitController {
         List<VisitResponseDTO> visits = visitService.getAllVisits();
         return ResponseEntity.ok(visits);
     }
+
+
+
+
 
 //    @GetMapping("/status/{status}")
 //    public ResponseEntity<List<VisitResponseDTO>> getVisitsByStatus(@PathVariable String status) {
