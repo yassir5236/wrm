@@ -1,5 +1,6 @@
 package org.yassir.wrm.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,25 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
+
+//@Entity
+//@Table(name = "visitors")
+//public class Visitor implements Serializable {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//
+//    private String FirstName;
+//
+//    private String LastName;
+//
+//    @OneToMany(mappedBy = "visitor")
+//    List<Visit> visits =new ArrayList<>();
+//}
+
+
 
 @Entity
 @Table(name = "visitors")
@@ -21,11 +40,11 @@ public class Visitor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String firstName;
 
-    private String FirstName;
+    private String lastName;
 
-    private String LastName;
+    @OneToMany(mappedBy = "visitor", cascade = CascadeType.ALL)
 
-    @OneToMany(mappedBy = "visitor")
-    List<Visit> visits =new ArrayList<>();
+    private List<Visit> visits = new ArrayList<>();
 }

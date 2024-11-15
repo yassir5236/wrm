@@ -1,5 +1,6 @@
 package org.yassir.wrm.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.yassir.wrm.Model.Enum.Algorithm;
@@ -13,25 +14,54 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
+
+//
+//@Entity
+//@Table(name = "waitingLists")
+//
+//public class WaitingList implements Serializable {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    Long id;
+//
+//    private LocalDate date;
+//
+//    @Enumerated(EnumType.STRING)
+//    private Algorithm algorithm;
+//
+//    private int capacity;
+//
+//    @Enumerated(EnumType.STRING)
+//    private TypeMode mode;
+//
+//    @OneToMany(mappedBy = "waitingList", cascade = CascadeType.ALL)
+//    List<Visit> visits = new ArrayList<>();
+//}
+
+
+
+
 @Entity
 @Table(name = "waitingLists")
-
 public class WaitingList implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
+    @Enumerated(EnumType.STRING)
     private Algorithm algorithm;
 
     private int capacity;
+
+    @Enumerated(EnumType.STRING)
     private TypeMode mode;
 
     @OneToMany(mappedBy = "waitingList", cascade = CascadeType.ALL)
-    List<Visit> visits = new ArrayList<>();
+    private List<Visit> visits = new ArrayList<>();
 }

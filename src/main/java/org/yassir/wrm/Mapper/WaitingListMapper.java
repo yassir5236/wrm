@@ -16,12 +16,8 @@
     public interface WaitingListMapper {
 
 
-//        @Mapping(source = "date", target = "date")
-//        @Mapping(source = "algorithm", target = "algorithm")
-//        @Mapping(source = "capacity", target = "capacity")
-//        @Mapping(source = "mode", target = "mode")
+
         WaitingList toEntity (WaitingListRequestDTO waitingListRequestDTO);
         WaitingListResponseDTO toResponseDto (WaitingList waitingList);
-//        WaitingListResponseDTO toWaitingListResponseDTO (WaitingList waitingList);
 
     }

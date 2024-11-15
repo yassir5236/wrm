@@ -17,3 +17,26 @@ services:
       PGADMIN_LISTEN_PORT: '5050'
     ports:
       - "5050:5050"
+
+
+  postgres-uat:
+    image: 'postgres:13'
+    environment:
+      POSTGRES_USER: 'uat_user'
+      POSTGRES_DB: 'uat_db'
+      POSTGRES_PASSWORD: 'uat_password'
+    ports:
+      - "5433:5433"
+    command: ["postgres", "-p", "5433"]
+
+  pgadmin-uat:
+    image: 'dpage/pgadmin4:latest'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'uat_admin@yourdomain.com'
+      PGADMIN_DEFAULT_PASSWORD: 'uat_admin_password'
+      PGADMIN_LISTEN_PORT: '5051'
+    ports:
+      - "5051:5051"
+
+
+

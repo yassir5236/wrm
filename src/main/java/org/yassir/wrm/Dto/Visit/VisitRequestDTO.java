@@ -13,7 +13,9 @@ public record VisitRequestDTO(
         LocalDateTime endTime,
         StatusType status,
         int priority,
-        int estimatedProcessingTime
+        int estimatedProcessingTime,
+        Long visitorId,
+        Long waitingListId
 
 ) {
 }

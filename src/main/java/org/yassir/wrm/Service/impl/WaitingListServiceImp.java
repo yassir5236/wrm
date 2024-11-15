@@ -5,24 +5,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yassir.wrm.Dto.WaitingList.WaitingListRequestDTO;
 import org.yassir.wrm.Dto.WaitingList.WaitingListResponseDTO;
+import org.yassir.wrm.Model.Entity.Visit;
 import org.yassir.wrm.Model.Entity.WaitingList;
 import org.yassir.wrm.Mapper.WaitingListMapper;
+import org.yassir.wrm.Model.Enum.Algorithm;
 import org.yassir.wrm.Repository.WaitingListRepository;
 import org.yassir.wrm.Service.IWaitingListService;
+import org.yassir.wrm.config.WaitingListConfig;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class WaitingListServiceImp implements IWaitingListService {
 
     private final WaitingListRepository waitingListRepository;
     private final WaitingListMapper waitingListMapper;
+    private final WaitingListConfig waitingListConfig;
+
 
     @Autowired
-    public WaitingListServiceImp(WaitingListRepository waitingListRepository, WaitingListMapper waitingListMapper) {
+    public WaitingListServiceImp(WaitingListRepository waitingListRepository, WaitingListMapper waitingListMapper, WaitingListConfig waitingListConfig) {
         this.waitingListRepository = waitingListRepository;
         this.waitingListMapper = waitingListMapper;
+        this.waitingListConfig = waitingListConfig;
     }
 
     @Override
@@ -50,7 +58,14 @@ public class WaitingListServiceImp implements IWaitingListService {
         WaitingList savedUpdatedList = waitingListRepository.save(updatedWaitingList);
         return waitingListMapper.toResponseDto(savedUpdatedList);
     }
-//
+
+
+    @Override
+    public void deleteWaitingList(Long waitingListId) {
+        waitingListRepository.deleteById(waitingListId);
+    }
+
+    //
 //    @Override
 //    public List<WaitingListResponseDTO> getAllWaitingLists() {
 //        List<WaitingList> waitingLists = waitingListRepository.findAll();
@@ -59,8 +74,49 @@ public class WaitingListServiceImp implements IWaitingListService {
 //                .collect(Collectors.toList());
 //    }
 
+
     @Override
-    public void deleteWaitingList(Long waitingListId) {
-        waitingListRepository.deleteById(waitingListId);
+    public List<WaitingListResponseDTO> getAllWaitingLists() {
+        List<WaitingList> waitingLists = StreamSupport
+                .stream(waitingListRepository.findAll().spliterator(), false)
+                .toList();
+
+        for (WaitingList waitingList : waitingLists) {
+            // Use the default algorithm if the waiting list's algorithm is null
+            Algorithm algorithm = waitingList.getAlgorithm() != null
+                    ? waitingList.getAlgorithm()
+                    : waitingListConfig.getDefaultAlgorithm();
+
+            List<Visit> sortedVisits;
+            switch (algorithm) {
+                case FIFO:
+                    sortedVisits = waitingList.getVisits().stream()
+                            .sorted(Comparator.comparing(Visit::getArriveTime))
+                            .collect(Collectors.toList());
+                    break;
+                case HPS:
+                    sortedVisits = waitingList.getVisits().stream()
+                            .sorted(Comparator.comparing(Visit::getPriority).reversed())
+                            .collect(Collectors.toList());
+                    break;
+                case SJF:
+                    sortedVisits = waitingList.getVisits().stream()
+                            .sorted(Comparator.comparing(Visit::getEstimatedProcessingTime))
+                            .collect(Collectors.toList());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown algorithm: " + algorithm);
+            }
+
+            // Set the sorted list back to the waiting list
+            waitingList.setVisits(sortedVisits);
+        }
+
+        // Map waiting lists to DTOs after sorting visits
+        return waitingLists.stream()
+                .map(waitingListMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 }
+
+

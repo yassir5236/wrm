@@ -31,9 +31,32 @@ public class WaitingListController {
 
 
     @PostMapping
-    public ResponseEntity<WaitingListResponseDTO> createWaitingList(@Valid @RequestBody WaitingListRequestDTO waitingListRequestDTO) {
+    public ResponseEntity<WaitingListResponseDTO> createWaitingList( @RequestBody WaitingListRequestDTO waitingListRequestDTO) {
         WaitingListResponseDTO createdWaitingList = waitingListService.createWaitingList(waitingListRequestDTO);
         return new ResponseEntity<>(createdWaitingList, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<WaitingListResponseDTO> updateWaitingList(
+            @PathVariable Long id,
+            @Valid @RequestBody WaitingListRequestDTO waitingListRequestDTO
+    ) {
+        WaitingListResponseDTO updatedWaitingList = waitingListService.updateWaitingList(id, waitingListRequestDTO);
+        return ResponseEntity.ok(updatedWaitingList);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<WaitingListResponseDTO> getWaitingListById(@PathVariable Long id) {
+        WaitingListResponseDTO waitingListResponseDTO = waitingListService.getWaitingListById(id);
+        return ResponseEntity.ok(waitingListResponseDTO);
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<WaitingListResponseDTO>> getAllWaitingLists() {
+        List<WaitingListResponseDTO> waitingLists = waitingListService.getAllWaitingLists();
+        return ResponseEntity.ok(waitingLists);
     }
 }
 
@@ -67,14 +90,7 @@ public class WaitingListController {
 //        return ResponseEntity.ok(ownerResponse);
 //    }
 //
-//    @PutMapping("/{id}")
-//    public ResponseEntity<WaitingListResponse> updateWaitingList(
-//            @IdExist(message = "owner noooot found") @PathVariable Long id,
-//            @Valid @RequestBody WaitingListUpdate ownerUpdate
-//    ) {
-//        WaitingListResponse updatedWaitingList = ownerService.updateWaitingList(id, ownerUpdate);
-//        return ResponseEntity.ok(updatedWaitingList);
-//    }
+
 //
 //    @GetMapping
 //    public ResponseEntity<List<WaitingListResponse>> getAllWaitingLists() {

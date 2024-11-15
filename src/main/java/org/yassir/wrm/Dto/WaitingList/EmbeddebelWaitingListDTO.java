@@ -12,7 +12,7 @@ public record EmbeddebelWaitingListDTO(
 
         Long id,
 
-        LocalDateTime date,
+        LocalDate date,
 
         Algorithm algorithm,
 

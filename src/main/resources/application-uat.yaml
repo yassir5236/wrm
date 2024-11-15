@@ -1,15 +1,9 @@
 spring:
   datasource:
-#    url: jdbc:postgresql://localhost:5432/uat_db
-#    username: uat_user
-#    password: uat_password
-#    driver-class-name: org.postgresql.Driver
-
-    url: jdbc:postgresql://localhost:5431/wrm
-    username: yassir
+    url: jdbc:postgresql://localhost:5432/uat_db
+    username: postgres
     password: User_Password
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: none

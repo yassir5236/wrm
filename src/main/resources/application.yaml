@@ -1,3 +1,6 @@
+waiting-list:
+  default-algorithm: FIFO
+
 wrm:
   scheduling:
     algorithm: FIFO
@@ -9,12 +12,7 @@ wrm:
 
 spring:
   profiles:
-    active: uat
-  datasource:
-    url: jdbc:postgresql://localhost:5431/wrm
-    username: yassir
-    password: User_Password
-    driver-class-name: org.postgresql.Driver
+    active: dev
   jpa:
     generate-ddl: true
     hibernate:
