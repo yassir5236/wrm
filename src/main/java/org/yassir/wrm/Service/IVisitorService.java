@@ -17,6 +17,5 @@ public interface IVisitorService {
 
     void deleteVisitor(Long visitorId);
 
-    List<VisitResponseDTO> getVisitsByStatus(String status);
 
 }
