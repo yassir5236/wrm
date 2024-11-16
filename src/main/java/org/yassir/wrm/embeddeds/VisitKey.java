@@ -18,16 +18,6 @@ public record VisitKey(
 }
 
 
-//@Embeddable
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class VisitKey implements Serializable{
-//    Long visitorId;
-//    Long waitingListId;
-//}
-
-
 
 
 

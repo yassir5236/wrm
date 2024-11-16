@@ -78,13 +78,10 @@ public class Visit implements Serializable {
     private VisitKey id;
 
     @NotNull(message = "L'heure d'arrivée est obligatoire.")
-    @PastOrPresent(message = "L'heure d'arrivée doit être dans le passé ou le présent.")
     private LocalDateTime arriveTime;
 
-    @FutureOrPresent(message = "L'heure de début doit être dans le présent ou le futur.")
     private LocalDateTime startTime;
 
-    @FutureOrPresent(message = "L'heure de fin doit être dans le présent ou le futur.")
     private LocalDateTime endTime;
 
     @NotNull(message = "Le statut est obligatoire.")

@@ -14,6 +14,7 @@ import org.yassir.wrm.Repository.VisitorRepository;
 import org.yassir.wrm.Repository.WaitingListRepository;
 import org.yassir.wrm.Service.IVisitService;
 import org.yassir.wrm.Mapper.VisitMapper;
+import org.yassir.wrm.embeddeds.VisitKey;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,71 +24,48 @@ public class VisitServiceImp implements IVisitService {
 
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
-       private final VisitorRepository visitorRepository;
-       private final WaitingListRepository waitingListRepository;
+    private final VisitorRepository visitorRepository;
+    private final WaitingListRepository waitingListRepository;
+
 
     @Autowired
-    public VisitServiceImp(VisitRepository visitRepository, VisitMapper visitMapper, VisitorRepository visitorRepository, WaitingListRepository waitingListRepository) {
+    public VisitServiceImp(VisitRepository visitRepository, VisitMapper visitMapper, VisitorRepository visitorRepository, WaitingListRepository waitingListRepository ) {
         this.visitRepository = visitRepository;
         this.visitMapper = visitMapper;
         this.visitorRepository = visitorRepository;
         this.waitingListRepository = waitingListRepository;
     }
 
-//    @Override
-//    public VisitResponseDTO createVisit(VisitRequestDTO visitRequestDTO) {
-//        Visit visit = visitMapper.toEntity(visitRequestDTO);
-//        Visit savedVisit = visitRepository.save(visit);
-//        return visitMapper.toResponseDto(savedVisit);
-//    }
 
     @Override
     public VisitResponseDTO createVisit(VisitRequestDTO visitRequestDTO) {
-        // Convert the DTO to the entity
         Visit visit = visitMapper.toEntity(visitRequestDTO);
 
-        // Fetch the Visitor from the database using visitorId
         Visitor visitor = visitorRepository.findById(visitRequestDTO.visitorId())
                 .orElseThrow(() -> new IllegalArgumentException("Visitor not found"));
 
-        // Fetch the WaitingList from the database using waitingListId
         WaitingList waitingList = waitingListRepository.findById(visitRequestDTO.waitingListId())
                 .orElseThrow(() -> new IllegalArgumentException("WaitingList not found"));
 
-        // Debugging: Log or print to confirm the WaitingList is being set
         System.out.println("WaitingList fetched: " + waitingList);
 
-        // Set the visitor and waiting list on the visit entity
         visit.setVisitor(visitor);
         visit.setWaitingList(waitingList);
 
-        // Debugging: Ensure both are set properly
         System.out.println("Visit entity before saving: " + visit);
 
-        // Save the visit entity
         Visit savedVisit = visitRepository.save(visit);
-
-        // Return the response DTO
         return visitMapper.toResponseDto(savedVisit);
     }
 
 
     @Override
-    public VisitResponseDTO getVisitById(Long visitId) {
-        Visit visit = visitRepository.findById(visitId)
-                .orElseThrow(() -> new IllegalArgumentException("Visit not found with ID: " + visitId));
+    public VisitResponseDTO getVisitById(VisitKey visitKey) {
+        Visit visit = visitRepository.findById(visitKey)
+                .orElseThrow(() -> new IllegalArgumentException("Visit not found with key: " + visitKey));
         return visitMapper.toResponseDto(visit);
     }
 
-    @Override
-    public VisitResponseDTO updateVisit(Long id, VisitRequestDTO visitRequestDTO) {
-        Visit existingVisit = visitRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Visit not found with ID: " + id));
-
-        visitMapper.updateEntity(visitRequestDTO, existingVisit);  // This method updates the entity in place
-        Visit updatedVisit = visitRepository.save(existingVisit);
-        return visitMapper.toResponseDto(updatedVisit);
-    }
 
     @Override
     public List<VisitResponseDTO> getAllVisits() {
@@ -97,21 +75,47 @@ public class VisitServiceImp implements IVisitService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<VisitResponseDTO> getVisitsByStatus(String status) {
-//        StatusType statusType = StatusType.valueOf(status.toUpperCase());
-//        List<Visit> visits = visitRepository.findByStatus(statusType);
-//        return visits.stream()
-//                .map(visitMapper::toResponseDto)
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public VisitResponseDTO updateVisitStatus(Long visitorId, Long waitingListId, String newStatus) {
+        StatusType statusType;
+        try {
+            statusType = StatusType.valueOf(newStatus.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Statut invalide : " + newStatus);
+        }
+        WaitingList waintingList = waitingListRepository.findById(waitingListId)
+                .orElseThrow(() -> new IllegalArgumentException("WaitingList not found"));
+
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() -> new IllegalArgumentException("Visitor not found"));
+
+        VisitKey visitKey = new VisitKey(visitorId, waitingListId);
+
+        Visit visit = visitRepository.findById(visitKey)
+                .orElseThrow(() -> new IllegalArgumentException("Visite introuvable avec la clé : " + visitKey));
+
+        visit.setStatus(statusType);
+        Visit updatedVisit = visitRepository.save(visit);
+        return visitMapper.toResponseDto(updatedVisit);
+    }
 
 
     @Override
-    public void deleteVisit(Long visitId) {
-        if (!visitRepository.existsById(visitId)) {
-            throw new IllegalArgumentException("Visit not found with ID: " + visitId);
+    public void deleteVisit(VisitKey visitKey) {
+        if (!visitRepository.existsById(visitKey)) {
+            throw new IllegalArgumentException("Visit not found with key: " + visitKey);
         }
-        visitRepository.deleteById(visitId);
+        visitRepository.deleteById(visitKey);
+    }
+
+
+    @Override
+    public VisitResponseDTO updateVisit(VisitKey visitKey, VisitRequestDTO visitRequestDTO) {
+        Visit existingVisit = visitRepository.findById(visitKey)
+                .orElseThrow(() -> new IllegalArgumentException("Visit not found with key: " + visitKey));
+
+        visitMapper.updateEntity(visitRequestDTO, existingVisit);
+        Visit updatedVisit = visitRepository.save(existingVisit);
+        return visitMapper.toResponseDto(updatedVisit);
     }
 }

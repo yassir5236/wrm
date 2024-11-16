@@ -46,12 +46,6 @@ public class WaitingListController {
     }
 
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<WaitingListResponseDTO> getWaitingListById(@PathVariable Long id) {
-//        WaitingListResponseDTO waitingListResponseDTO = waitingListService.getWaitingListById(id);
-//        return ResponseEntity.ok(waitingListResponseDTO);
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<WaitingListResponseDTO> getSortedWaitingListById(@PathVariable Long id) {
         WaitingListResponseDTO sortedWaitingList = waitingListService.getWaitingListById(id);
@@ -66,75 +60,3 @@ public class WaitingListController {
     }
 }
 
-
-//
-//@RestController
-//@RequestMapping("/api/owners")
-//@Validated
-//public class WaitingListController {
-//
-//    private final WaitingListRepository ownerRepository;
-//    private IWaitingListService ownerService;
-//
-//    @Autowired
-//    public WaitingListController(IWaitingListService ownerService, WaitingListRepository ownerRepository) {
-//        this.ownerService = ownerService;
-//        this.ownerRepository = ownerRepository;
-//    }
-//
-//
-//
-//    @PostMapping
-//    public ResponseEntity<WaitingListResponse> createWaitingList(@Valid @RequestBody WaitingListRequest ownerRequest) {
-//        WaitingListResponse createdWaitingList = ownerService.createWaitingList(ownerRequest);
-//        return new ResponseEntity<>(createdWaitingList, HttpStatus.CREATED);
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<WaitingListResponse> getWaitingListById(@IdExist(message = "owner noooot found") @PathVariable Long id) {
-//        WaitingListResponse ownerResponse = ownerService.getWaitingListById(id);
-//        return ResponseEntity.ok(ownerResponse);
-//    }
-//
-
-//
-//    @GetMapping
-//    public ResponseEntity<List<WaitingListResponse>> getAllWaitingLists() {
-//        List<WaitingListResponse> owners = ownerService.getAllWaitingLists();
-//        return ResponseEntity.ok(owners);
-//
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<WaitingListResponse> deleteWaitingList(@IdExist(message = "owner introvable with this id") @PathVariable Long id) {
-//        ownerService.deleteWaitingList(id);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//
-//
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-//        StringBuilder errors = new StringBuilder();
-//        ex.getBindingResult().getFieldErrors().forEach(error -> {
-//            errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("\n");
-//        });
-//        return ResponseEntity.badRequest().body(errors.toString());
-//    }
-//
-//
-//
-//
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
-//        String errorMessage = ex.getConstraintViolations().stream()
-//                .map(violation -> violation.getMessage())
-//                .findFirst()
-//                .orElse("Erreur de validation");
-//
-//        return ResponseEntity.badRequest().body(errorMessage);
-//    }
-//
-//
-//}
-//

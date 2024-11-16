@@ -1,6 +1,5 @@
 package org.yassir.wrm.Controller;
 
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,9 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.yassir.wrm.Dto.Visit.VisitRequestDTO;
 import org.yassir.wrm.Dto.Visit.VisitResponseDTO;
-import org.yassir.wrm.Dto.WaitingList.WaitingListResponseDTO;
 import org.yassir.wrm.Service.IVisitService;
-import org.yassir.wrm.Service.IWaitingListService;
+import org.yassir.wrm.embeddeds.VisitKey;
 
 import java.util.List;
 
@@ -19,37 +17,35 @@ import java.util.List;
 public class VisitController {
 
     private final IVisitService visitService;
-    private final IWaitingListService waitingListService;
 
     @Autowired
-    public VisitController(IVisitService visitService , IWaitingListService waitingListService) {
+    public VisitController(IVisitService visitService) {
         this.visitService = visitService;
-        this.waitingListService = waitingListService;
     }
 
     @PostMapping
-    public ResponseEntity<VisitResponseDTO> createVisit( @RequestBody VisitRequestDTO visitRequestDTO) {
+    public ResponseEntity<VisitResponseDTO> createVisit(@RequestBody VisitRequestDTO visitRequestDTO) {
         VisitResponseDTO createdVisit = visitService.createVisit(visitRequestDTO);
         return new ResponseEntity<>(createdVisit, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VisitResponseDTO> getVisitById(@PathVariable Long id) {
-        VisitResponseDTO visit = visitService.getVisitById(id);
+    @GetMapping("/{visitKey}")
+    public ResponseEntity<VisitResponseDTO> getVisitById(@PathVariable VisitKey visitKey) {
+        VisitResponseDTO visit = visitService.getVisitById(visitKey);
         return ResponseEntity.ok(visit);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{visitKey}")
     public ResponseEntity<VisitResponseDTO> updateVisit(
-            @PathVariable Long id,
+            @PathVariable VisitKey visitKey,
             @Valid @RequestBody VisitRequestDTO visitRequestDTO) {
-        VisitResponseDTO updatedVisit = visitService.updateVisit(id, visitRequestDTO);
+        VisitResponseDTO updatedVisit = visitService.updateVisit(visitKey, visitRequestDTO);
         return ResponseEntity.ok(updatedVisit);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVisit(@PathVariable Long id) {
-        visitService.deleteVisit(id);
+    @DeleteMapping("/{visitKey}")
+    public ResponseEntity<Void> deleteVisit(@PathVariable VisitKey visitKey) {
+        visitService.deleteVisit(visitKey);
         return ResponseEntity.noContent().build();
     }
 
@@ -59,13 +55,12 @@ public class VisitController {
         return ResponseEntity.ok(visits);
     }
 
-
-
-
-
-//    @GetMapping("/status/{status}")
-//    public ResponseEntity<List<VisitResponseDTO>> getVisitsByStatus(@PathVariable String status) {
-//        List<VisitResponseDTO> visits = visitService.getVisitsByStatus(status);
-//        return ResponseEntity.ok(visits);
-//    }
+    @PutMapping("/{visitorId}-{waitingListId}/status")
+    public ResponseEntity<VisitResponseDTO> updateVisitStatus(
+            @PathVariable Long visitorId,
+            @PathVariable Long waitingListId,
+            @RequestParam String status) {
+        VisitResponseDTO updatedVisit = visitService.updateVisitStatus(visitorId, waitingListId, status);
+        return ResponseEntity.ok(updatedVisit);
+    }
 }
