@@ -20,6 +20,8 @@ public record Embeddebel2VisitDTO(
 
         int estimatedProcessingTime,
 
+        Integer satisfactionScore,
+
         EmbeddebelVisitorDTO visitor
 
         

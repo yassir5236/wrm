@@ -18,24 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.yassir.wrm.Dto.Visitor.VisitorRequestDTO;
-import org.yassir.wrm.Dto.Visitor.VisitorResponseDTO;
-import org.yassir.wrm.Model.Entity.Visitor;
-import org.yassir.wrm.Model.Entity.Visitor;
-import org.yassir.wrm.Model.Entity.WaitingList;
-import org.yassir.wrm.Model.Enum.StatusType;
-import org.yassir.wrm.Repository.VisitorRepository;
-import org.yassir.wrm.Repository.VisitorRepository;
-import org.yassir.wrm.Repository.WaitingListRepository;
-import org.yassir.wrm.Service.IVisitorService;
-import org.yassir.wrm.Mapper.VisitorMapper;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class VisitorServiceImp implements IVisitorService {
 

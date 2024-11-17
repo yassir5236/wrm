@@ -22,6 +22,8 @@ public record   EmbeddebelVisitDTO(
 
         int estimatedProcessingTime,
 
+        Integer satisfactionScore,
+
         EmbeddebelWaitingListDTO waitingList
         
         ) {

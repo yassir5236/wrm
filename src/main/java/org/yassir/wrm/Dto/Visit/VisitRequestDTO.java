@@ -15,7 +15,8 @@ public record VisitRequestDTO(
         int priority,
         int estimatedProcessingTime,
         Long visitorId,
-        Long waitingListId
+        Long waitingListId,
+        Integer satisfactionScore
 
 ) {
 }

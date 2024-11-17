@@ -41,13 +41,7 @@ public class WaitingListServiceImp implements IWaitingListService {
         WaitingList savedWaitingList = waitingListRepository.save(waitingList);
         return waitingListMapper.toResponseDto(savedWaitingList);
     }
-//
-//    @Override
-//    public WaitingListResponseDTO getWaitingListById(Long waitingListId) {
-//        WaitingList waitingList = waitingListRepository.findById(waitingListId)
-//                .orElseThrow(() -> new RuntimeException("Waiting list not found with ID: " + waitingListId));
-//        return waitingListMapper.toResponseDto(waitingList);
-//    }
+
 
 
     @Override
@@ -55,7 +49,6 @@ public class WaitingListServiceImp implements IWaitingListService {
         WaitingList waitingList = waitingListRepository.findById(waitingListId)
                 .orElseThrow(() -> new RuntimeException("Waiting list not found with ID: " + waitingListId));
 
-        // Use the default algorithm if the waiting list's algorithm is null
         Algorithm algorithm = waitingList.getAlgorithm() != null
                 ? waitingList.getAlgorithm()
                 : waitingListConfig.getDefaultAlgorithm();
@@ -81,10 +74,8 @@ public class WaitingListServiceImp implements IWaitingListService {
                 throw new IllegalArgumentException("Unknown algorithm: " + algorithm);
         }
 
-        // Set the sorted list back to the waiting list
         waitingList.setVisits(sortedVisits);
 
-        // Map the waiting list to a response DTO and return it
         return waitingListMapper.toResponseDto(waitingList);
     }
 
@@ -105,14 +96,7 @@ public class WaitingListServiceImp implements IWaitingListService {
         waitingListRepository.deleteById(waitingListId);
     }
 
-    //
-//    @Override
-//    public List<WaitingListResponseDTO> getAllWaitingLists() {
-//        List<WaitingList> waitingLists = waitingListRepository.findAll();
-//        return waitingLists.stream()
-//                .map(waitingListMapper::toResponseDTO)
-//                .collect(Collectors.toList());
-//    }
+
 
 
     @Override
@@ -122,7 +106,6 @@ public class WaitingListServiceImp implements IWaitingListService {
                 .toList();
 
         for (WaitingList waitingList : waitingLists) {
-            // Use the default algorithm if the waiting list's algorithm is null
             Algorithm algorithm = waitingList.getAlgorithm() != null
                     ? waitingList.getAlgorithm()
                     : waitingListConfig.getDefaultAlgorithm();
@@ -148,11 +131,9 @@ public class WaitingListServiceImp implements IWaitingListService {
                     throw new IllegalArgumentException("Unknown algorithm: " + algorithm);
             }
 
-            // Set the sorted list back to the waiting list
             waitingList.setVisits(sortedVisits);
         }
 
-        // Map waiting lists to DTOs after sorting visits
         return waitingLists.stream()
                 .map(waitingListMapper::toResponseDto)
                 .collect(Collectors.toList());

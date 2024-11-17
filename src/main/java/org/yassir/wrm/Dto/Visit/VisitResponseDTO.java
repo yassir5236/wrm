@@ -21,8 +21,9 @@ public record VisitResponseDTO(
         int priority,
 
         int estimatedProcessingTime,
+        Integer satisfactionScore,
 
-        EmbeddebelVisitorDTO visitor ,
+        EmbeddebelVisitorDTO visitor,
         EmbeddebelWaitingListDTO waitingList
 
 ) {
